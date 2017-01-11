@@ -1,0 +1,16 @@
+[DEFAULT]
+
+[DATABASE]
+server=127.0.0.1
+port=3306
+database=MAMonitor
+username=mam_user
+password=...
+
+[EMAIL]
+server=smtp.gmail.com
+port=587
+username=la.reports.relay@gmail.com
+password=...
+sender=la.reports.relay@gmail.com
+recipient=fredrick@loopaware.com
