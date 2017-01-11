@@ -1,0 +1,1 @@
+CREATE SCHEMA `mamonitor` DEFAULT CHARACTER SET utf8 ;
