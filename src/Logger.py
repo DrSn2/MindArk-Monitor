@@ -40,5 +40,5 @@ class Logger(object):
         """ Writes message into a file """
         dt = strftime("%Y-%m-%d %H:%M:%S", gmtime())
         self.logFile = open("log.txt", "a")
-        self.logFile.write(dt + '\t' + message)
+        self.logFile.write(dt + '\t' + message + '\n')
         self.logFile.close()

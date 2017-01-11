@@ -32,6 +32,7 @@ class Notifier(object):
         self.args = args
     
     def notify(self):
+        """ Send report email """
         try:
             if (self.args.debug or self.args.verbose):
                 print("Constructing email...")

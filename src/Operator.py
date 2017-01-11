@@ -33,6 +33,7 @@ class Operator(object):
         self.notifier = Notifier(args, conf)
     
     def act(self):
+        """ The main brains of the application """
         self.log.write("Start")
         self.site.openSite()
         headers = self.site.findAllIDsOfName("jobApplication")
@@ -56,6 +57,7 @@ class Operator(object):
         self.notify()
     
     def notify(self):
+        """ Report back to user via email """
         if (not self.notifier.notify()):
             self.log.write("Error: Cannot notify by email.")
 
