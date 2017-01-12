@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
 Created on 11 jan. 2017
@@ -31,7 +30,7 @@ class Notifier(object):
         
         self.args = args
     
-    def notify(self):
+    def notify(self, count):
         """ Send report email """
         try:
             if (self.args.debug or self.args.verbose):

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Created on 11 jan. 2017
 
@@ -66,7 +67,24 @@ class DBConnection(object):
         return True
     
     def saveJobEntry(self, jobEntry):
-        pass
+        """ Write entry into jobentries table """
+        try:
+            self.connect()
+            self.execute("insert into jobentries (found, name, description) values (now(), '" + jobEntry[0] + "', '" + jobEntry[1] + "');")
+            self.disconnect()
+        except Exception:
+            return False
+        
+        return True
     
     def findJobEntry(self, jobEntry):
-        pass
+        """ Find job entry in DB """
+        result = None
+        try:
+            self.connect()
+            result = self.query("select name, description from jobentries where name ='" + jobEntry[0] + "';")
+            self.disconnect()
+        except Exception:
+            return []
+        
+        return [result[0][0], result[0][1]]
