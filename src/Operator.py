@@ -55,23 +55,43 @@ class Operator(object):
         
         for job in entries:
             if (self.isVerbose):
-                print("Finding jobtitles...")
+                print("Scraping jobinfo...")
             
             splitData = job.text.splitlines()
-            print(splitData[0])
+            print(splitData)
             print(str.join("\n", splitData[1:]))
             
-            entryData = [splitData[0], str.join("\n", splitData[1:])] #= self.db.findJobEntry(job) # jobEntry is defines as list, [title, description]
+            
+            entryData = [splitData[0], str.join("\n", splitData[1:])]  # jobEntry is defined as list, [title, description]
+            
+            
+            # Fix problem with empty descriptions
+            if (len(entryData[1]) < 250):
+                print(job)
+                #jobDivElements = self.site.findByCSSSelectorRelativeTo("css=div[id^='jobs_']", job)
+                
+                switchBtns = self.site.  (//td[contains(@label, 'Choice 1')]/input)
+                
+                print(jobDivElements)
+                entryData[1] = jobDivElements[0].text
+                print(jobDivElements[0].text)
             
             if (len(entryData) == 0):     
                 self.log.write("Could not find entry data.")
                 continue
             
+            dbData = self.db.findJobEntry(entryData)
+            if (len(dbData) > 0):
+                continue
+            if (entryData[0] != dbData[0] and entryData[1] != dbData[1]):
+                continue
             self.db.saveJobEntry(entryData)
             self.newEntryCount += 1
             self.log.write("Found and Saved new Job")
         
-        self.notify()
+        if (self.newEntryCount > 0):
+            self.notify()        
+        
         self.site.closeSite()
     
     def notify(self):

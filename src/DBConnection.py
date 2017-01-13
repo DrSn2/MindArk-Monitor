@@ -87,4 +87,7 @@ class DBConnection(object):
         except Exception:
             return []
         
-        return [result[0][0], result[0][1]]
+        if (len(result) > 0):
+            return [result[0]["name"], result[0]["description"]]
+        else:
+            return []

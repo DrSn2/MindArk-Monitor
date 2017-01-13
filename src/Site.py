@@ -51,11 +51,11 @@ class Site(object):
         elements = [self.driver.find_element_by_id(name)]
         return elements
     
-    def findByXPatth(self, string):
-        elements = self.driver.find_element_by_xpath(string)
+    def findByXPathRelativeTo(self, path, elem):
+        elements = elem.find_elements_by_xpath(path)
         return elements
     
-    def getJobEntry(self, title):
-        
-        jobEntry = ['head', 'desc']
-        return jobEntry
+    def findByCSSSelectorRelativeTo(self, expressionString, elementOfRelevance):
+        elements = elementOfRelevance.find_elements_by_css_selector('')
+        #elements = self.driver.find_element_by_css_selector(exp)
+        return elements
