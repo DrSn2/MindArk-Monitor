@@ -68,11 +68,12 @@ class Operator(object):
             # Fix problem with empty descriptions
             if (len(entryData[1]) < 250):
                 print(job)
-                #jobDivElements = self.site.findByCSSSelectorRelativeTo("css=div[id^='jobs_']", job)
+                jobDivElements = self.site.findByCSSSelectorRelativeTo("css=div[id^='jobs_']", job)
                 
-                switchBtns = self.site.  (//td[contains(@label, 'Choice 1')]/input)
+                #switchBtns = self.site.  (//td[contains(@label, 'Choice 1')]/input)
                 
                 print(jobDivElements)
+                return
                 entryData[1] = jobDivElements[0].text
                 print(jobDivElements[0].text)
             
