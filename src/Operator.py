@@ -53,41 +53,21 @@ class Operator(object):
         if (self.isVerbose):
             print("Entries found.")
         
+        i = 0
+        textToggles = self.site.findByRelativeXPath("//a[starts-with(@onclick,'switchMenu')]")
         for job in entries:
             if (self.isVerbose):
                 print("Scraping jobinfo...")
             
             splitData = job.text.splitlines()
-            print(splitData)
-            print(str.join("\n", splitData[1:]))
-            
             
             entryData = [splitData[0], str.join("\n", splitData[1:])]  # jobEntry is defined as list, [title, description]
             
-            
-            # Fix problem with empty descriptions
+            # Fix problem with empty descriptions, by clicking the switchmenu
             if (len(entryData[1]) < 250):
-                print(job)
-                #jobDivElements = self.site.findByCSSSelectorRelativeTo("css=div[id^='jobs_']", job)
-                
-                #switchBtns = self.site.  (//td[contains(@label, 'Choice 1')]/input)
-                btn = self.site.findByXPathRelativeTo("//a[starts-with(@onclick,'switchMenu')]", job)
-                print(btn)
-                print(btn[0].text)
-                btn[0].click()
-                print(btn[0].text)
+                textToggles[i].click()
                 desc = self.site.findByXPathRelativeTo("//div[starts-with(@id,'jobs_')]", job)
-                print(desc)
-                print(desc[0].text[0:100])
-                
-                self.site.closeSite()
-                exit()
-                
-                
-                #print(jobDivElements)
-                #return
-                #entryData[1] = jobDivElements[0].text
-                #print(jobDivElements[0].text)
+                entryData[1] = desc[i].text
             
             if (len(entryData) == 0):     
                 self.log.write("Could not find entry data.")
@@ -101,6 +81,7 @@ class Operator(object):
             self.db.saveJobEntry(entryData)
             self.newEntryCount += 1
             self.log.write("Found and Saved new Job")
+            i += 1
         
         if (self.newEntryCount > 0):
             self.notify()        

@@ -53,6 +53,10 @@ class Site(object):
         elements = [self.driver.find_element_by_id(name)]
         return elements
     
+    def findByRelativeXPath(self, path):
+        elements = self.driver.find_elements_by_xpath(path)
+        return elements
+    
     def findByXPathRelativeTo(self, path, elem):
         elements = elem.find_elements_by_xpath(path)
         return elements
