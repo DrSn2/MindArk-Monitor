@@ -68,14 +68,26 @@ class Operator(object):
             # Fix problem with empty descriptions
             if (len(entryData[1]) < 250):
                 print(job)
-                jobDivElements = self.site.findByCSSSelectorRelativeTo("css=div[id^='jobs_']", job)
+                #jobDivElements = self.site.findByCSSSelectorRelativeTo("css=div[id^='jobs_']", job)
                 
                 #switchBtns = self.site.  (//td[contains(@label, 'Choice 1')]/input)
+                btn = self.site.findByXPathRelativeTo("//a[starts-with(@onclick,'switchMenu')]", job)
+                print(btn)
+                print(btn[0].text)
+                btn[0].click()
+                print(btn[0].text)
+                desc = self.site.findByXPathRelativeTo("//div[starts-with(@id,'jobs_')]", job)
+                print(desc)
+                print(desc[0].text[0:100])
                 
-                print(jobDivElements)
-                return
-                entryData[1] = jobDivElements[0].text
-                print(jobDivElements[0].text)
+                self.site.closeSite()
+                exit()
+                
+                
+                #print(jobDivElements)
+                #return
+                #entryData[1] = jobDivElements[0].text
+                #print(jobDivElements[0].text)
             
             if (len(entryData) == 0):     
                 self.log.write("Could not find entry data.")

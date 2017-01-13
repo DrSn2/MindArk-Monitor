@@ -19,6 +19,7 @@ class Site(object):
         '''
         
         self.url = conf["SITE"]["url"]
+        self.executablePath = conf["SITE"]["phantomjs"]
         self.driver = None
         self.isDebug = args.debug
         self.isVerbose = args.verbose        
@@ -27,7 +28,7 @@ class Site(object):
         if (self.isDebug or self.isVerbose):
             print("Opening:" + self.url)
             
-        self.driver = webdriver.PhantomJS(executable_path="../external/phantomjs.exe")
+        self.driver = webdriver.PhantomJS(executable_path=self.executablePath)
         #self.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
         self.driver.set_window_size(1120, 550) # or 1280x720??
         self.driver.get(self.url)
@@ -57,6 +58,6 @@ class Site(object):
         return elements
     
     def findByCSSSelectorRelativeTo(self, expressionString, elementOfRelevance):
-        elements = self.driver.find_elements_by_css_selector(expressionString)
+        elements = self.driver.find_elements_by_css_selector('')
         #elements = self.driver.find_element_by_css_selector(exp)
         return elements
