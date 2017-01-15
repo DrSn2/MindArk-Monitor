@@ -6,15 +6,15 @@
 Monitors the [MindArk Career site](http://www.mindark.com/career/current-positions/) for changes, then send notifications to the user.
 
   - Using headless driver, selenium 3 for python 3, open the job listings site.
-  - Search for the class name, jobApplication.
+  - Search for the class name, 'jobApplication'.
   - If it exists
-    - Search for all of class name, jobTitle.
-    - For every match
-      - Check if already saved.
-        - If not saved, then save all relevant info on entry
+    - Search for jobentries.
+    - For every entry
+      - Check if already saved, and stored version is less than 7 days old.
+        - If not saved or saved is too old, then save all relevant info on entry
         - Notify user via email
 
-This was mainly made as a fun excuse to implement gmail, selenium and mysql into a python applicaton, and practice deployment.
+This was mainly created as a fun excuse to implement gmail, selenium and mysql into a python applicaton, and practice deployment.
 
 ### Tech
 
