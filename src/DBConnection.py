@@ -91,3 +91,18 @@ class DBConnection(object):
             return [result[0]["name"], result[0]["description"]]
         else:
             return []
+        
+    def findRecentJobEntry(self, jobEntry):
+        """ Find job entry in DB last 7 days """
+        result = None
+        try:
+            self.connect()
+            result = self.query("select name, description from jobentries where name ='" + jobEntry[0] + "' and datediff(found, now()) < 7;")
+            self.disconnect()
+        except Exception:
+            return []
+        
+        if (len(result) > 0):
+            return [result[0]["name"], result[0]["description"]]
+        else:
+            return []

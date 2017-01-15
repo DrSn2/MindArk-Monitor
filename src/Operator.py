@@ -73,11 +73,15 @@ class Operator(object):
                 self.log.write("Could not find entry data.")
                 continue
             
-            dbData = self.db.findJobEntry(entryData)
+            #dbData = self.db.findJobEntry(entryData)
+            #if (len(dbData) > 0):
+            #    if (entryData[0] == dbData[0] and entryData[1] == dbData[1]):
+            #        continue
+            
+            dbData = self.db.findRecentJobEntry(entryData)
             if (len(dbData) > 0):
                 continue
-            if (entryData[0] != dbData[0] and entryData[1] != dbData[1]):
-                continue
+            
             self.db.saveJobEntry(entryData)
             self.newEntryCount += 1
             self.log.write("Found and Saved new Job")
