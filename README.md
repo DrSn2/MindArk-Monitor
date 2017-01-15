@@ -82,20 +82,19 @@ CREATE TABLE `mamonitor`.`log` (
 ###### Create the User
 
 Create a MySQL user called 'mam_user'.
+
 Then grant 'SELECT', 'UPDATE' and 'INSERT' rights to the entire 'mamonitor'-schema.
 
 ##### Create or use an existing Gmail Account with low security settings.
 
-My email notificatin solution is based on an [article](http://naelshiab.com/tutorial-send-email-python/) talking about hte native smtp library in python 3+.
+My email notificatin solution is based on an [article](http://naelshiab.com/tutorial-send-email-python/) talking about the native smtp library in python 3+.
 
 ##### Set up the Config File
 Copy the conf-template.
+
 Insert the correct values.
+
 *Note: phantomjs value should be the executable path, relative or absolute. e.g. './pjs.exe'
-
-### Development
-
-Information for developers.
 
 ### Todos
 
