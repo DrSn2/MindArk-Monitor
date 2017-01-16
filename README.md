@@ -1,7 +1,6 @@
 # MindArk-Monitor
 
-
-[![LoopAware](http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-9/64/search-file-icon.png)](http://loopaware.com)
+[![Quick Overview Schematic](./docs/images/mamon-20170114.png)](./docs/MindArk-Monitor-Design.pdf)
 
 Monitors the [MindArk Career site](http://www.mindark.com/career/current-positions/) for changes, then send notifications to the user.
 
@@ -26,14 +25,22 @@ The solution was developed and tested with the following tech and their respecti
 * [MySQL Server 5.7.17][mysql5717] - SQL Database
 * [Gmail][gm] - Google's mail solution
 
+### Design
+
+[![Flow Chart](./docs/images/mamon-flow-20170114.png)](./docs/MindArk-Monitor-Design.pdf)
+
+[![Classes Schematic](./docs/images/mamon-classes-20170114.png)](./docs/MindArk-Monitor-Design.pdf)
+
+See the [docs folder](./docs) for more.
+
 ### Installation
 
 #### Install the dependencies.
 
-* Python 3.4 or newer
-* Selenium 3 or newer
-* PhantomJS 2.1 or newer
-* MySQL Server 5.7.17 or newer
+* [Python 3.4][py352] or newer
+* [Selenium 3][py352] or newer
+* [PhantomJS 2.1][py352] or newer
+* [MySQL Server 5.7.17][py352] or newer
 
 #### Install python libraries
 
@@ -87,12 +94,15 @@ Then grant 'SELECT', 'UPDATE' and 'INSERT' rights to the entire 'mamonitor'-sche
 
 ##### Create or use an existing Gmail Account with low security settings.
 
+You now have to [allow "less secure apps"](https://www.google.com/settings/security/lesssecureapps) to be used with the account.
+
 My email notificatin solution is based on an [article](http://naelshiab.com/tutorial-send-email-python/) talking about the native smtp library in python 3+.
 
 ##### Set up the Config File
 Copy the conf-template.
 
 Insert the correct values.
+
 
 *Note: phantomjs value should be the executable path, relative or absolute. e.g. './pjs.exe'
 
