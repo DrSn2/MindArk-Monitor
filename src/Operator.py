@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
 Created on 11 jan. 2017
@@ -26,6 +25,9 @@ class Operator(object):
         Constructor
         '''
         
+        self.isDebug = args.debug
+        self.isVerbose = args.verbose
+        
         self.newEntryCount = 0
         self.log = Logger(args, conf)
         self.site = Site(args, conf)
@@ -33,29 +35,65 @@ class Operator(object):
         self.notifier = Notifier(args, conf)
     
     def act(self):
+        """ The main brains of the application """
         self.log.write("Start")
         self.site.openSite()
-        headers = self.site.findAllIDsOfName("jobApplication")
         
-        if (len(headers) == 0):
+        if (self.isVerbose):
+            print("Finding entries...")
+            
+        entries = self.site.findAllClassesOfName("jobApplication")
+        
+        if (len(entries) == 0):
+            self.site.closeSite()
+            if (self.isVerbose):
+                print("No entries found.")
             return
         
-        jobs = self.site.findAllClassesOfName("jobTitle")
+        if (self.isVerbose):
+            print("Entries found.")
         
-        if (len(jobs)):
-            return
-        
-        for job in jobs:
-            if (self.db.findJobEntry(job)):
+        i = 0
+        textToggles = self.site.findByRelativeXPath("//a[starts-with(@onclick,'switchMenu')]")
+        for job in entries:
+            if (self.isVerbose):
+                print("Scraping jobinfo...")
+            
+            splitData = job.text.splitlines()
+            
+            entryData = [splitData[0], str.join("\n", splitData[1:])]  # jobEntry is defined as list, [title, description]
+            
+            # Fix problem with empty descriptions, by clicking the switchmenu
+            if (len(entryData[1]) < 250):
+                textToggles[i].click()
+                desc = self.site.findByXPathRelativeTo("//div[starts-with(@id,'jobs_')]", job)
+                entryData[1] = desc[i].text
+            
+            if (len(entryData) == 0):     
+                self.log.write("Could not find entry data.")
                 continue
             
-            self.db.saveJobEntry(job)
+            #dbData = self.db.findJobEntry(entryData)
+            #if (len(dbData) > 0):
+            #    if (entryData[0] == dbData[0] and entryData[1] == dbData[1]):
+            #        continue
+            
+            dbData = self.db.findRecentJobEntry(entryData)
+            if (len(dbData) > 0):
+                continue
+            
+            self.db.saveJobEntry(entryData)
             self.newEntryCount += 1
             self.log.write("Found and Saved new Job")
+            i += 1
         
-        self.notify()
+        if (self.newEntryCount > 0):
+            self.notify()        
+        
+        self.site.closeSite()
     
     def notify(self):
-        if (not self.notifier.notify()):
+        """ Report back to user via email """
+        if (not self.notifier.notify(self.newEntryCount)):
             self.log.write("Error: Cannot notify by email.")
 

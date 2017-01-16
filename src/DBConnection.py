@@ -1,12 +1,15 @@
+# -*- coding: utf-8 -*-
 '''
 Created on 11 jan. 2017
 
 @author: Fredrick
 '''
 
+import pymysql.cursors
+
 class DBConnection(object):
     '''
-    classdocs
+    Handles data communication to & from MySQL database
     '''
 
 
@@ -14,24 +17,92 @@ class DBConnection(object):
         '''
         Constructor
         '''
+        self.server     = conf["DATABASE"]["server"]
+        self.port       = conf["DATABASE"]["port"]
+        self.database   = conf["DATABASE"]["database"]
+        self.username   = conf["DATABASE"]["username"]
+        self.password   = conf["DATABASE"]["password"]
+        
+        self.connection = None
+        self.cursor = None
         
     def connect(self):
-        pass
+        """ Connect to db """
+        # Connect to the database
+        self.connection = pymysql.connect(host=self.server,
+                             user=self.username,
+                             password=self.password,
+                             db=self.database,
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
     
-    def disconnet(self):
-        pass
+    def disconnect(self):
+        """ Disconnect from db """
+        self.connection.close()
     
     def query(self, sql):
-        return []
+        """ Execute read query """
+        self.cursor = self.connection.cursor()
+        self.cursor.execute(sql)
+        result = self.cursor.fetchall()
+        
+        return result
     
     def execute(self, sql):
+        """ Execute write query """
+        self.cursor = self.connection.cursor()
+        self.cursor.execute(sql)
+        self.connection.commit()
         return 0
     
     def writeLog(self, message):
-        return False
+        """ Write entry into log table """
+        try:
+            self.connect()
+            self.execute("insert into log (created, message) values (now(), '" + message + "');")
+            self.disconnect()
+        except Exception:
+            return False
+        
+        return True
     
     def saveJobEntry(self, jobEntry):
-        pass
+        """ Write entry into jobentries table """
+        try:
+            self.connect()
+            self.execute("insert into jobentries (found, name, description) values (now(), '" + jobEntry[0] + "', '" + jobEntry[1] + "');")
+            self.disconnect()
+        except Exception:
+            return False
+        
+        return True
     
     def findJobEntry(self, jobEntry):
-        pass
+        """ Find job entry in DB """
+        result = None
+        try:
+            self.connect()
+            result = self.query("select name, description from jobentries where name ='" + jobEntry[0] + "';")
+            self.disconnect()
+        except Exception:
+            return []
+        
+        if (len(result) > 0):
+            return [result[0]["name"], result[0]["description"]]
+        else:
+            return []
+        
+    def findRecentJobEntry(self, jobEntry):
+        """ Find job entry in DB last 7 days """
+        result = None
+        try:
+            self.connect()
+            result = self.query("select name, description from jobentries where name ='" + jobEntry[0] + "' and datediff(found, now()) < 7;")
+            self.disconnect()
+        except Exception:
+            return []
+        
+        if (len(result) > 0):
+            return [result[0]["name"], result[0]["description"]]
+        else:
+            return []
