@@ -46,7 +46,11 @@ class Site(object):
             print("Closed site.")
     
     def findAllClassesOfName(self, name):
-        elements = self.driver.find_elements_by_class_name(name)
+        elements = None
+        try:
+            elements = self.driver.find_elements_by_class_name(name)
+        except Exception:
+            elements = []
         return elements
     
     def findAllIDsOfName(self, name):
