@@ -72,7 +72,10 @@ def init():
     if (args.debug):
         dumpArgs()
 
-    readConfig("monitor.conf")
+    confFileName = "./mamon.conf"
+    if (args.config_file):
+        confFileName = args.config_file
+    readConfig(confFileName)
     if (args.debug):
         dumpConfig()
     
